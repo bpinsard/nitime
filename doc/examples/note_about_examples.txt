@@ -1,8 +1,4 @@
-.. _note_about_examples:
-
-=========================
-A note about the examples
-=========================
+**A note about the examples**
 
 The examples here are some uses of the analysis and visualization functionality
 of nitime, with example data from actual neuroscience experiments, or with
