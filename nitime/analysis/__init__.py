@@ -31,3 +31,4 @@ from nitime.analysis.normalization import *
 from nitime.analysis.snr import *
 from nitime.analysis.spectral import *
 from nitime.analysis.granger import *
+from nitime.analysis.integration import *
