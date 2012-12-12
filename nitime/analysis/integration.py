@@ -24,9 +24,9 @@ class IntegrationAnalyzer(BaseAnalyzer):
         self.networks = networks
         BaseAnalyzer.__init__(self, input)
 
-#    def _entropy(m):
-#        return 0.5*np.log(np.linalg.det(m))
-    
+    def _entropie(self,m):
+        return 0.5*m.shape[0]*(np.log(2*np.pi)+1) + np.log(np.linalg.det(m))
+        
     def _integration(self,m):
         return -0.5*np.log(np.linalg.det(m))
 
@@ -38,6 +38,12 @@ class IntegrationAnalyzer(BaseAnalyzer):
         if self.networks:
             for net,rois in self.networks.items():
                 intra[net] = self._integration(self.input[rois,:][:,rois])
-        inter = dict([(net,total-i) for net,i in intra.items()])
-
-        return total, inter, intra
+        inter = dict()
+        for n1,r1 in self.networks.items():
+            inter[n1]=dict()
+            for n2,r2 in self.networks.items():
+                r12 = np.unique(r1+r2)
+                inter[n1][n2] = self._entropie(self.input[r1,:][:,r1]) + \
+                    self._entropie(self.input[r2,:][:,r2]) - \
+                    self._entropie(self.input[r12,:][:,r12])
+        return total, intra, inter
