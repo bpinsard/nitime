@@ -12,11 +12,11 @@ from nitime.six.moves import zip
 if "nose" in sys.modules:
     import matplotlib
     matplotlib.use('agg')
-
+     
 # Then do all the rest of it:
 import numpy as np
 from scipy import fftpack
-from matplotlib import mpl
+import matplotlib as mpl
 from matplotlib import pyplot as plt
 import matplotlib.ticker as ticker
 import matplotlib.colors as colors
@@ -27,6 +27,14 @@ import nitime.utils as tsu
 from nitime.utils import threshold_arr, minmax_norm, rescale_arr
 import nitime.analysis as nta
 
+# Matplotlib 1.3 has a bug in it, so if that's what you have, we'll replace it
+# for you with a fixed version of that module:
+import matplotlib
+if matplotlib.__version__[:3] == '1.3' or matplotlib.__version__[:3] == '1.4':
+    import nitime._mpl_units as mpl_units
+    import matplotlib.axis as ax
+    ax.munits = mpl_units
+    
 from nitime.utils import triu_indices
 
 #Some visualization functions require networkx. Import that if possible:
@@ -38,7 +46,7 @@ except ImportError:
     e_s += "\n To download networkx: http://networkx.lanl.gov/"
     print(e_s)
     class NetworkxNotInstalled(object):
-        def __getattribute__(self,x):
+        def __getattribute__(self, x):
             raise ImportError(e_s)
     nx = NetworkxNotInstalled()
 
